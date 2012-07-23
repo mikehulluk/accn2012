@@ -5,8 +5,8 @@ Introduction to NEURON(90 Mins):
 
  * 30 mins presentation
 
-   - Who am I?   
-   - Why use NEURON ( 5-10 mins):
+   - Who am I? (1 minute)   
+   - Why use NEURON? ( 5-10 mins)
 
 	* Use-cases: What does it do?
          * What do i need to use it?
@@ -105,15 +105,15 @@ Resources
 ~~~~~~~~~
  * Active questions board
  * ModelDB
- 
+ * The NEURON Book 
 
 
 Basics of NEURON (20-25 mins)
 -----------------------------
 
+
 2 Parts: HOC and NMODL files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
  * Two main types of language:
    
     * Interpreted languages (Python/matlab) are interactive, but slow
@@ -121,15 +121,16 @@ Basics of NEURON (20-25 mins)
 
  * NEURON uses both:
     
-   * 'HOC Interpreter' - which controls the 'structure' of the simulation
-   * 'NMODL' - a compiled language for specifying the dynamics of channels/synapses in math
+   * 'HOC' - which controls the 'structure' of the simulation
+   * 'NMODL' - a compiled language for specifying the dynamics of channels/synapses mathematically (e.g. Hodgkin-Huxley type channels).
 
 
-2 Parts: HOC and .mod files
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
- * NEURON has an interactive interpreter, HOC, which controls the
-   'structure' of the simulation:
+
+HOC Interpreter
+~~~~~~~~~~~~~~~
+
+ * HOC is an interactive interpreter which controls the 'structure' of the simulation:
    
     * creating morphologies
     * defining which channels to apply and changing certain parameters (channel densities) 
@@ -138,16 +139,59 @@ Basics of NEURON (20-25 mins)
     * setting simulation parameters: stimulation time-steps,      
     * running the simulation
 
- 
 
-GUI vs HOC
-~~~~~~~~~~
+NMODL
+~~~~~
 
-Example Simple simulation: Single Compartment HH with current injection
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * We will discuss NMODL later...
+
+
+HOC - Graphical User Interface
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ * NEURON can be used entirely from the commandline and with 'scripts'::
+
+   $ nrnoc
+   $ oc> 
+
+
+ * NEURON also has a graphical user interface::
+  
+   $ nrngui
+	
+.. image:: src_imgs/neuron_mainmenu.gif
+	:width: 10cm	
+
+
+
+Overview of all the components
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. image:: blah.png
+    :width: 10
+
+
+
+
+Example Simple simulation: Soma + Axon Compartment HH with current injection
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+TODO: Image:
 
 Representing cell morphology
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~         
+
+ * In NEURON, neuron morphologies are represented as a tree of 'unbranched cylinders'
+
+todo: Image of this:
+
+.. code-block:: verbose
+	
+	Example1
+
+
+
+
 
 Using channels
 ~~~~~~~~~~~~~~~
