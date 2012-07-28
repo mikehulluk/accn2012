@@ -111,6 +111,12 @@ Resources
 Basics of NEURON (20-25 mins)
 -----------------------------
 
+Overview
+~~~~~~~~
+
+	* NEURON is complex (I will cover a lot of material in the next slides, don't worry if you don't remember all the details its the concepts that are important)
+	* NEURON is old
+
 
 2 Parts: HOC and NMODL files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -129,7 +135,6 @@ Basics of NEURON (20-25 mins)
 
 HOC Interpreter
 ~~~~~~~~~~~~~~~
-
  * HOC is an interactive interpreter which controls the 'structure' of the simulation:
    
     * creating morphologies
@@ -155,10 +160,13 @@ HOC - Graphical User Interface
    $ oc> 
 
 
- * NEURON also has a graphical user interface::
-  
-   $ nrngui
-	
+ * NEURON also has a graphical user interface
+
+.. code-block:: verbose
+   $ nrngui	
+   $ oc> 	
+
+
 .. image:: src_imgs/neuron_mainmenu.gif
 	:width: 10cm	
 
@@ -178,23 +186,97 @@ Example Simple simulation: Soma + Axon Compartment HH with current injection
 
 TODO: Image:
 
-Representing cell morphology
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~         
 
- * In NEURON, neuron morphologies are represented as a tree of 'unbranched cylinders'
 
-todo: Image of this:
+Morphologies I (Overview)
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+ * Neuron morphologies are represented as a tree of 'unbranched cylinders' called 'Sections' which describe the 'gross' morphology of the neuron. 
+
+.. image:: src_imgs/morphology1.png
+
+
+
+Morphology II ((Building & Connecting Sections)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ * 'Sections' are created with the `create <name>` command
+ * Section are connected together with the `connect` function. 
+ * **L**\ength and **diam**\ eter of the sections are set as properties for each section::
+
+	
+	oc> create soma
+	oc> create axon_proximal
+	oc> create axon_distal
+	
+	oc> connect soma(1.0), axon_proximal(0.0)
+	oc> connect axon_proximal(1.0), axon_distal(0.0)
+	
+	oc> soma L = 12.3
+	oc> soma diam = 12.3
+
+	oc> axon_proximal diam = 1.0
+	oc> axon_proximal L = 50
+
+	oc> axon_proximal diam = 0.5
+	oc> axon_proximal L = 20
+
+
+
+Morphologies III (Segmentation)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~      
+
+ * NEURON separates the description of the overall morphology from 
+   the amount of discretisation of the simulation.
+ * To solve simulations more accuratly, Sections can be subdivided into 'segments'.
+ * Each segment has its own voltage and state variables
+ * (Hines & Carnevale recommend using an odd number of segments)::
+
+	oc> axon_proximal nseg = 11
+	oc> axon_proximal nseg = 3
+
+
+
+
+
+Channels I (Overview)
+~~~~~~~~~~~~~~~~~~~~~
+
+ * Neurons are interesting because of their active membrane channels
+ * NEURON can handle many common use cases:
+	
+         - it is possible to define your own using NMODL files (not covered here)
+	- it comes with some predefined channel definitions.
+
+   
+Channels II (Examples)
+~~~~~~~~~~~~~~~~~~~~~~
+
+.. image:: passive channels
+
+.. image:: hh-type channels
+ 
+Channels III (Using channels)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ * Channels are `insert`\ ed into each Section
+ * Channels can have parameters that can be changed in HOC, (e.g. conduction density)
+ * E.g.::
+	
+	oc> soma insert hh
+	oc> soma insert hh
+	oc> soma hh.e_rev=12
+
+
+Summarising Cells:
+~~~~~~~~~~~~~~~~~~
 
 .. code-block:: verbose
-	
-	Example1
 
+	oc> soma psection()
+         ...
 
-
-
-
-Using channels
-~~~~~~~~~~~~~~~
 
 Stimuli
 ~~~~~~~
