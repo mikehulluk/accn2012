@@ -1,4 +1,21 @@
-{"pageSetup": {
+{
+  "styles": [
+  ["bodytext", {
+    "alignment": "left",
+    "spaceBefore":0,
+    "spaceAfter":0
+    }
+  ],
+    [ "bullet-list-item" , {
+      "parent": "bodytext",
+      "spaceBefore": 7}
+    ]
+    
+    ],
+    
+    
+    "pageSetup": {
+
     "width": "16cm", 
     "height": "10cm",
     "margin-top": "2mm",

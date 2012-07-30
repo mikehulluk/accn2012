@@ -1,50 +1,30 @@
 
 Introduction to NEURON(90 Mins):
----------------------------------
+==================================
 
 
- * 30 mins presentation
-
-   - Who am I? (1 minute)   
-   - Why use NEURON? ( 5-10 mins)
-
-	* Use-cases: What does it do?
-         * What do i need to use it?
-	* Resources
-
-   - Basics of NEURON (20-25 mins):
-
-	* 2 Parts: HOC and .mod files
-         * GUI vs HOC
-         * Example simulation: Single Compartment HH with current injection
-	* Representing cell morphology
-         * Using channels
-         * Stimuli
-         * Running the simulation
-         * Plotting the results
-
- * 45 mins exercise
-  
-  - Based on David Sterrat and Andrew Gillies tutorial
-
- * 15 mins Wrap up
-   
-   - nrnivmodl
-   - More things with NEURON: cvode,
-   - Interfacing with Python (limitations)
-   - other simulators - GENESIS, MOOSE
-   - other options; morphforge, neuroml, nineml, neuronvisio, pynn;
-   - Links to other tools
+.. contents::
+    :depth: 1
 
 
+Introduction
+------------
 
 
+Who am I
+~~~~~~~~
+
+    * I am not a NEURON guru
+    * 3rd year Ph.D student (4 years using NEURON for modelling work)
+    * Teaching-Assistant for Neural-Computation course at Edinburgh Uni
+    * One of the developers of NineML (incl. NEURON interface)
+    * Author of *morphforge* - a high-level interface to NEURON in python
 
 
 Why use NEURON ( 5-10 mins)
 ----------------------------
 From the NEURON website (my bold type):
- 
+
  - is a flexible and powerful **simulator of neurons and networks**
  - has important advantages over general-purpose simulators helps users **focus on important biological issues** rather than purely computational concerns
  - has a convenient user interface
@@ -55,16 +35,12 @@ From the NEURON website (my bold type):
  - is well-documented and **actively supported**
  - is **free, open source**, and runs on (almost) everything
 
-
-
 Use-cases - What does it do? I
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
-  * Modelling of multicompartmental neurons
-     - keeps track of ion movements
-
-  * Connections between cells through synapses
+  * Modelling of multicompartmental neurons in which membrane voltage is
+    calculated from ion flows across the membranes
+  * Connections between cells through synapses (chemical & electrical)
   * Defining your own channels & synapses
-
   * If you are interested in large networks of 'simple', single
     compartement neurons, there are other options.
 
@@ -73,12 +49,12 @@ Use-cases - What does it do? II
   * For a single compartment cell with simple HH dynamics,
     you can probably write your own solver using ODE solvers in 
     matlab/python.
-  
+
   * As your models develop more complexity:
-    
+
     - Current dependancies e.g. intracellular Ca2+ dependant K channels
-    - Solving of Cable Equations for multicompartmental neurons
-    - Connections via synapses & gap junctions
+    - Incoorperation of the cable equations for multicompartmental neurons
+    - Connections via synapses & gap junctions (synaptic delays)
 
   * You may find that you are reimplementing lots of mathematical solving,
     which has been already been done efficiently in NEURON.
@@ -86,19 +62,19 @@ Use-cases - What does it do? II
   * MOD files provide a standard for exchanging channel descriptions
     (e.g. modeldb)
 
+  * NEURON is highly parallelisable (e.g. BBP) for large networks
   * There is a python interface
-  * Highly parallelisable (e.g. BBP) for large networks
 
 
 What do i need to use it?
 ~~~~~~~~~~~~~~~~~~~~~~~~~  
+
   * It runs on most operating systems (Windows/Linux/Mac). On the NEURON website:
-    
     - Windows installer
     - Mac package
     - Linux .deb, .rpm package
 
-  * Eilif Muller has a precompiled binaries including Python support
+  * Eilif Muller has precompiled binaries including Python support
     http://neuralensemble.org/people/eilifmuller/software.html
 
 Resources
@@ -114,77 +90,84 @@ Basics of NEURON (20-25 mins)
 Overview
 ~~~~~~~~
 
-	* NEURON is complex (I will cover a lot of material in the next slides, don't worry if you don't remember all the details its the concepts that are important)
-	* NEURON is old
+    * NEURON is complex (I will cover a lot of material in the next slides,
+      don't worry if you don't remember all the details - its the concepts that
+      are important)
+
+    * NEURON is old (& built on even older software)
 
 
 2 Parts: HOC and NMODL files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * Two main types of language:
-   
+
     * Interpreted languages (Python/matlab) are interactive, but slow
-    * Compiled languages (Fortran/C/C++/...) are fast
+
+    * Compiled languages (Fortran/C/C++/...) are fast, but not interactive
 
  * NEURON uses both:
-    
-   * 'HOC' - which controls the 'structure' of the simulation
-   * 'NMODL' - a compiled language for specifying the dynamics of channels/synapses mathematically (e.g. Hodgkin-Huxley type channels).
 
+    * 'HOC' - which controls the 'structure' of the simulation
+
+    * 'NMODL' - a compiled language for specifying the dynamics of
+      channels/synapses (e.g. Hodgkin-Huxley type channels).
+      We will not cover NMODL in this tutorial.
 
 
 
 HOC Interpreter
 ~~~~~~~~~~~~~~~
- * HOC is an interactive interpreter which controls the 'structure' of the simulation:
-   
-    * creating morphologies
-    * defining which channels to apply and changing certain parameters (channel densities) 
-    * creating stimuli: current clamps, voltage clamps
-    * defining what you want to record: voltages, internal states
-    * setting simulation parameters: stimulation time-steps,      
-    * running the simulation
+
+    * HOC is an interactive interpreter which controls the 'structure' of the simulation:
+
+        * creating morphologies
+        * defining which channels to apply and changing certain parameters (channel densities) 
+        * creating stimuli: current clamps, voltage clamps
+        * defining what you want to record: voltages, internal states
+        * setting simulation parameters: stimulation time-steps,
+        * running the simulation
 
 
-NMODL
-~~~~~
 
- * We will discuss NMODL later...
+
+
+
+Example Simple simulation: Soma + Axon, HH Channels, with current injection
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ * We will walk through the steps required to simulate a neuron, which has
+   as soma and an axon, stimulate it with a current clamp, and visualise the 
+   somatic membrane voltage.
+
+ .. image:: src_imgs/simulationoverview.png
+    :width: 5in
+
 
 
 HOC - Graphical User Interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
- * NEURON can be used entirely from the commandline and with 'scripts'::
-
-   $ nrnoc
-   $ oc> 
-
-
- * NEURON also has a graphical user interface
+NEURON can be used entirely from the commandline and with 'scripts':
 
 .. code-block:: verbose
+
+   $ nrnoc
+   oc>
+
+
+NEURON also has a graphical user interface:
+
+.. code-block:: verbose
+
    $ nrngui	
-   $ oc> 	
+   oc> 	
 
 
 .. image:: src_imgs/neuron_mainmenu.gif
-	:width: 10cm	
+    :width: 10cm	
 
 
 
-Overview of all the components
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. image:: blah.png
-    :width: 10
-
-
-
-
-Example Simple simulation: Soma + Axon Compartment HH with current injection
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-TODO: Image:
 
 
 
@@ -192,49 +175,61 @@ Morphologies I (Overview)
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
- * Neuron morphologies are represented as a tree of 'unbranched cylinders' called 'Sections' which describe the 'gross' morphology of the neuron. 
+ * Neuron morphologies are represented as a tree of 'unbranched cylinders'
+   called 'Sections' which describe the 'gross' morphology of the neuron. 
+ * E.g.
 
-.. image:: src_imgs/morphology1.png
+.. image:: src_imgs/morphology2.gif
+    :width: 3.5in
 
 
 
-Morphology II ((Building & Connecting Sections)
+Morphology II (Building & Connecting Sections)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
  * 'Sections' are created with the `create <name>` command
- * Section are connected together with the `connect` function. 
- * **L**\ength and **diam**\ eter of the sections are set as properties for each section::
+ * Section are connected together with the `connect` function.
+ * '0' defines one end of the Section, '1' defines the other.
+ * **L**\ength and **diam**\ eter of the sections are set as properties for
+   each section.
 
-	
-	oc> create soma
-	oc> create axon_proximal
-	oc> create axon_distal
-	
-	oc> connect soma(1.0), axon_proximal(0.0)
-	oc> connect axon_proximal(1.0), axon_distal(0.0)
-	
-	oc> soma L = 12.3
-	oc> soma diam = 12.3
+.. code-block:: verbose
 
-	oc> axon_proximal diam = 1.0
-	oc> axon_proximal L = 50
+    // Create 3 Sections:
+    oc> create soma
+    oc> create axon_proximal
+    oc> create axon_distal
 
-	oc> axon_proximal diam = 0.5
-	oc> axon_proximal L = 20
+    // Setup the sizes of each Section:
+    oc> soma L = 12.3
+    oc> soma diam = 12.3
+
+    oc> axon_proximal diam = 1.0
+    oc> axon_proximal L = 50
+
+    oc> axon_proximal diam = 0.5
+    oc> axon_proximal L = 20
+
+    // Setup the connections:
+    oc> connect soma(1.0), axon_proximal(0.0)
+    oc> connect axon_proximal(1.0), axon_distal(0.0)
 
 
 
 Morphologies III (Segmentation)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~      
 
- * NEURON separates the description of the overall morphology from 
+ * NEURON separates the description of the overall morphology from
    the amount of discretisation of the simulation.
  * To solve simulations more accuratly, Sections can be subdivided into 'segments'.
  * Each segment has its own voltage and state variables
- * (Hines & Carnevale recommend using an odd number of segments)::
+ * (Hines & Carnevale recommend using an odd number of segments)
 
-	oc> axon_proximal nseg = 11
-	oc> axon_proximal nseg = 3
+
+.. code-block:: verbose
+
+    oc> axon_proximal nseg = 11
+    oc> axon_proximal nseg = 3
 
 
 
@@ -244,12 +239,15 @@ Channels I (Overview)
 ~~~~~~~~~~~~~~~~~~~~~
 
  * Neurons are interesting because of their active membrane channels
- * NEURON can handle many common use cases:
-	
-         - it is possible to define your own using NMODL files (not covered here)
-	- it comes with some predefined channel definitions.
+ * Channels define the currents flowing across the membrane (e.g. sodium,
+   potassium, leak)
+ * NEURON covers common use-cases:
 
-   
+    - it is possible to define your own using NMODL files (not covered here)
+    - it comes with some predefined channel definitions.
+
+
+
 Channels II (Examples)
 ~~~~~~~~~~~~~~~~~~~~~~
 
@@ -262,30 +260,112 @@ Channels III (Using channels)
 
  * Channels are `insert`\ ed into each Section
  * Channels can have parameters that can be changed in HOC, (e.g. conduction density)
- * E.g.::
-	
-	oc> soma insert hh
-	oc> soma insert hh
-	oc> soma hh.e_rev=12
+ * E.g.
 
+.. code-block:: verbose
+
+    // Insert the channel into the soma Section
+    oc> create soma
+    oc> soma insert hh
+
+    // View and change some properties:
+    oc> soma.gnabar_hh
+        0.12
+    oc>soma.gnabar_hh = 0.2
 
 Summarising Cells:
 ~~~~~~~~~~~~~~~~~~
 
 .. code-block:: verbose
 
-	oc> soma psection()
-         ...
+    oc> soma psection()
+         // displays details about 'soma'
+
+    oc> forall psection()
+         // displays details about all sections
+
+Stimuli (Overview)
+~~~~~~~~~~~~~~~~~~
+    * NEURON is very flexible in the stimulation protocols that can be used
+    * Most commonly used are:
+
+        * Current Clamp (`IClamp`)
+        * Voltage Clamp (`SEClamp`, `VClamp`)
+
+Stimuli (Current Clamp)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+    * For example, a current clamp called 'stim' at the centre of the soma:
+
+.. code-block:: verbose
+
+    oc> objvar stim
+    oc> soma stim = new IClamp(0.5)
+    oc> stim.del = 100
+    oc> stim.dur = 100
+    oc> stim.amp = 0.1
 
 
-Stimuli
-~~~~~~~
-         
+
+
 Running the simulation
 ~~~~~~~~~~~~~~~~~~~~~~
+
+    * NEURON simulations are run:
+
+        * with the 'run()' command from `.hoc`
+        * clicking 'Init & Run' from the GUI
+
+    * By default, running the simulation will not plot anything....
+
 
 Plotting the results
 ~~~~~~~~~~~~~~~~~~~~
 
+    * We want to plot the internal states of the simulation (e.g. membrane
+      voltage, current flows, state variables)
+
+    * This is easiest done by using the NEURON GUI
+    * (It is also possible to save results to file using code)
+
+.. image:: src_imgs/graphmenu.png
+    :height: 2.3in
 
 
+Exercises (45 mins)
+-------------------
+
+    * We will work through the tutorial from David Sterratt and Andrew Gillies.
+    * Section **A:** investigates a single compartment neuron containing HH
+      channels, stimulated with a current clamp
+    * Section **B:** extending this to a multicompartmental neuron
+
+    * These can be found at: `http://www.anc.ed.ac.uk/school/neuron/`
+
+
+Wrap Up (10 mins)
+-----------------
+
+Useful things to know about NEURON
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    * `nrnivmodl` is a tool that is used to compile all the .mod files in your
+      local directory, so they can be used in HOC. 
+
+    * NEURON is contains an 'adaptive-timestep' integrator, which can
+      dramatically improve simulation time in some circumstances. This is
+      enabled simply by adding `cvode_active(1)` before calling `run()`
+
+    * NEURON has a python interface. This allows you to use the hoc Interpreter
+      from within Python, and access stored data as numpy-arrays.
+
+
+Competitors to NEURON
+~~~~~~~~~~~~~~~~~~~~~~
+   - other simulators - GENESIS, MOOSE
+
+Other Tools in the ecosystem
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   - other options; morphforge, neuroml, nineml, neuronvisio, pynn;
+   - Links to other tools
