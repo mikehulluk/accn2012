@@ -6,6 +6,7 @@ Introduction to NEURON(90 Mins):
 .. contents::
     :depth: 1
 
+*(Thanks to David Sterratt for the use of some images from his set of NEURON tutorials)*
 
 Introduction
 ------------
@@ -128,6 +129,9 @@ HOC Interpreter
         * running the simulation
 
 
+.. code-block:: C
+
+    oc> /*type commands here*/
 
 
 
@@ -207,12 +211,18 @@ Morphology II (Building & Connecting Sections)
     oc> axon_proximal diam = 1.0
     oc> axon_proximal L = 50
 
-    oc> axon_proximal diam = 0.5
-    oc> axon_proximal L = 20
+    oc> axon_distal diam = 0.5
+    oc> axon_distal L = 20
 
     // Setup the connections:
     oc> connect soma(1.0), axon_proximal(0.0)
     oc> connect axon_proximal(1.0), axon_distal(0.0)
+
+    // (Mysterious line explained later)
+    oc> access soma
+
+
+
 
 
 
@@ -229,10 +239,32 @@ Morphologies III (Segmentation)
 .. code-block:: verbose
 
     oc> axon_proximal nseg = 11
-    oc> axon_proximal nseg = 3
+    oc> axon_distal nseg = 3
 
 
+HOC: *psection()*
+~~~~~~~~~~~~~~~~~~
 
+.. code-block:: verbose
+
+    oc>forall psection()
+    soma { nseg=1  L=12.3  Ra=35.4
+        axon_proximal connect soma (1), 0
+        /* First segment only */
+        insert morphology { diam=12.3}
+        insert capacitance { cm=1}
+    }
+    axon_proximal { nseg=11  L=50  Ra=35.4
+        axon_distal connect axon_proximal (1), 0
+        /* First segment only */
+        insert morphology { diam=1.0}
+        insert capacitance { cm=1}
+    }
+    axon_distal { nseg=3  L=20  Ra=35.4
+        /*location 0 attached to cell 0*/
+        /* First segment only */
+        insert morphology { diam=0.5}
+        insert capacitance { cm=1}
 
 
 Channels I (Overview)
@@ -247,13 +279,14 @@ Channels I (Overview)
     - it comes with some predefined channel definitions.
 
 
+ * NEURON automatically inserts a membrane capacitance and an axial resistance
 
-Channels II (Examples)
+Channels II (Segments)
 ~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: passive channels
+.. image:: src_imgs/channel_blocks.png
+    :width: 5in
 
-.. image:: hh-type channels
  
 Channels III (Using channels)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -265,7 +298,6 @@ Channels III (Using channels)
 .. code-block:: verbose
 
     // Insert the channel into the soma Section
-    oc> create soma
     oc> soma insert hh
 
     // View and change some properties:
@@ -273,16 +305,22 @@ Channels III (Using channels)
         0.12
     oc>soma.gnabar_hh = 0.2
 
-Summarising Cells:
-~~~~~~~~~~~~~~~~~~
+Channels IV (Summary):
+~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: verbose
 
     oc> soma psection()
-         // displays details about 'soma'
+    soma { nseg=1  L=12.3  Ra=35.4
+        axon_proximal connect soma (1), 0
+        /* First segment only */
+        insert morphology { diam=12.3}
+        insert capacitance { cm=1}
+        insert hh { gnabar_hh=0.2 gkbar_hh=0.036 gl_hh=0.0003 el_hh=-54.3}
+        insert na_ion { ena=50}
+        insert k_ion { ek=-77}
+    }
 
-    oc> forall psection()
-         // displays details about all sections
 
 Stimuli (Overview)
 ~~~~~~~~~~~~~~~~~~
@@ -299,7 +337,7 @@ Stimuli (Current Clamp)
 
 .. code-block:: verbose
 
-    oc> objvar stim
+    oc> objref stim
     oc> soma stim = new IClamp(0.5)
     oc> stim.del = 100
     oc> stim.dur = 100
