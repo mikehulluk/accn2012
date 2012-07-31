@@ -6,20 +6,11 @@ Introduction to NEURON(90 Mins):
 .. contents::
     :depth: 1
 
-*(Thanks to David Sterratt for the use of some images from his set of NEURON tutorials)*
-
-Introduction
-------------
+*(Many thanks to David Sterratt (Uni of Edinburgh) for allowing the use of his
+tutorials and images)*
 
 
-Who am I
-~~~~~~~~
 
-    * I am not a NEURON guru
-    * 3rd year Ph.D student (4 years using NEURON for modelling work)
-    * Teaching-Assistant for Neural-Computation course at Edinburgh Uni
-    * One of the developers of NineML (incl. NEURON interface)
-    * Author of *morphforge* - a high-level interface to NEURON in python
 
 
 Why use NEURON ( 5-10 mins)
@@ -41,7 +32,6 @@ Use-cases - What does it do? I
   * Modelling of multicompartmental neurons in which membrane voltage is
     calculated from ion flows across the membranes
   * Connections between cells through synapses (chemical & electrical)
-  * Defining your own channels & synapses
   * If you are interested in large networks of 'simple', single
     compartement neurons, there are other options.
 
@@ -53,9 +43,9 @@ Use-cases - What does it do? II
 
   * As your models develop more complexity:
 
-    - Current dependancies e.g. intracellular Ca2+ dependant K channels
+    - Current dependancies e.g. intracellular Ca dependant K channels
     - Incoorperation of the cable equations for multicompartmental neurons
-    - Connections via synapses & gap junctions (synaptic delays)
+    - Connections via synapses (synaptic delays)
 
   * You may find that you are reimplementing lots of mathematical solving,
     which has been already been done efficiently in NEURON.
@@ -97,6 +87,8 @@ Overview
 
     * NEURON is old (& built on even older software)
 
+    * (These are positives and negatives)
+
 
 2 Parts: HOC and NMODL files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -122,25 +114,21 @@ HOC Interpreter
     * HOC is an interactive interpreter which controls the 'structure' of the simulation:
 
         * creating morphologies
-        * defining which channels to apply and changing certain parameters (channel densities) 
+        * choosing which channels to apply and where, changing certain
+          parameters (channel densities) 
+        * connecting cells together with synapses
         * creating stimuli: current clamps, voltage clamps
         * defining what you want to record: voltages, internal states
         * setting simulation parameters: stimulation time-steps,
         * running the simulation
 
 
-.. code-block:: C
 
-    oc> /*type commands here*/
-
-
-
-
-Example Simple simulation: Soma + Axon, HH Channels, with current injection
+Example simulation: Soma + Axon, HH Channels, with current injection
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
  * We will walk through the steps required to simulate a neuron, which has
-   as soma and an axon, stimulate it with a current clamp, and visualise the 
+   a soma and an axon, stimulate it with a current clamp, and visualise the 
    somatic membrane voltage.
 
  .. image:: src_imgs/simulationoverview.png
@@ -151,15 +139,7 @@ Example Simple simulation: Soma + Axon, HH Channels, with current injection
 HOC - Graphical User Interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-NEURON can be used entirely from the commandline and with 'scripts':
-
-.. code-block:: verbose
-
-   $ nrnoc
-   oc>
-
-
-NEURON also has a graphical user interface:
+NEURON has a graphical user interface:
 
 .. code-block:: verbose
 
@@ -171,6 +151,12 @@ NEURON also has a graphical user interface:
     :width: 10cm	
 
 
+Or NEURON can be used entirely from the commandline and with 'scripts':
+
+.. code-block:: verbose
+
+   $ nrnoc
+   oc>
 
 
 
@@ -179,9 +165,9 @@ Morphologies I (Overview)
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
- * Neuron morphologies are represented as a tree of 'unbranched cylinders'
-   called 'Sections' which describe the 'gross' morphology of the neuron. 
- * E.g.
+ * Neuron morphologies are represented as a tree of *unbranched cylinders*
+   called **Sections** which describe the *gross* morphology of the neuron. 
+ * e.g.
 
 .. image:: src_imgs/morphology2.gif
     :width: 3.5in
@@ -191,9 +177,7 @@ Morphologies I (Overview)
 Morphology II (Building & Connecting Sections)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
- * 'Sections' are created with the `create <name>` command
- * Section are connected together with the `connect` function.
- * '0' defines one end of the Section, '1' defines the other.
+ * **Sections** are created with the `create <section-name>` command
  * **L**\ength and **diam**\ eter of the sections are set as properties for
    each section.
 
@@ -214,26 +198,32 @@ Morphology II (Building & Connecting Sections)
     oc> axon_distal diam = 0.5
     oc> axon_distal L = 20
 
+
+Morphology II (Building & Connecting Sections)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ * **Sections** are connected together with the `connect` function.
+ * '0' defines one end of the **Section**, '1' defines the other.
+
+.. code-block:: verbose
+
     // Setup the connections:
     oc> connect soma(1.0), axon_proximal(0.0)
     oc> connect axon_proximal(1.0), axon_distal(0.0)
 
-    // (Mysterious line explained later)
-    oc> access soma
+.. image:: src_imgs/morph_locs.png
+    :width: 3.5in
 
 
 
 
-
-
-Morphologies III (Segmentation)
+Morphologies III (Segments)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~      
 
- * NEURON separates the description of the overall morphology from
-   the amount of discretisation of the simulation.
- * To solve simulations more accuratly, Sections can be subdivided into 'segments'.
- * Each segment has its own voltage and state variables
- * (Hines & Carnevale recommend using an odd number of segments)
+ * To solve simulations for better spatial accuracy, **Sections** can be
+   subdivided into **segments**.
+ * Each **segment** has its own voltage and state variables
+ * (Hines & Carnevale recommend using an odd number of **segments**)
 
 
 .. code-block:: verbose
@@ -265,6 +255,7 @@ HOC: *psection()*
         /* First segment only */
         insert morphology { diam=0.5}
         insert capacitance { cm=1}
+    }
 
 
 Channels I (Overview)
@@ -304,6 +295,7 @@ Channels III (Using channels)
     oc> soma.gnabar_hh
         0.12
     oc>soma.gnabar_hh = 0.2
+    // (in S/cm2)
 
 Channels IV (Summary):
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -387,23 +379,41 @@ Wrap Up (10 mins)
 Useful things to know about NEURON
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    * `nrnivmodl` is a tool that is used to compile all the .mod files in your
-      local directory, so they can be used in HOC. 
-
     * NEURON is contains an 'adaptive-timestep' integrator, which can
       dramatically improve simulation time in some circumstances. This is
       enabled simply by adding `cvode_active(1)` before calling `run()`
 
     * NEURON has a python interface. This allows you to use the hoc Interpreter
-      from within Python, and access stored data as numpy-arrays.
+      from within Python, use objects and access stored data as numpy-arrays.
+      HOWEVER! There are limitations on 'clearing-the-workspace'
 
 
-Competitors to NEURON
-~~~~~~~~~~~~~~~~~~~~~~
-   - other simulators - GENESIS, MOOSE
+'Competitors' to NEURON
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   - GENESIS, MOOSE
 
 Other Tools in the ecosystem
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-   - other options; morphforge, neuroml, nineml, neuronvisio, pynn;
-   - Links to other tools
+   - morphforge
+   - NeuroML & neuroConstruct
+   - NineML
+   - neuronvisio
+
+
+
+Any Questions
+~~~~~~~~~~~~~
+
+ ??
+
+
+Who am I
+~~~~~~~~
+
+    * I am not a NEURON guru
+    * 3rd year Ph.D student (4 years using NEURON for modelling work)
+    * Teaching-Assistant for Neural-Computation course at Edinburgh Uni
+    * One of the developers of NineML (incl. NEURON interface)
+    * Author of *morphforge* - a high-level interface to NEURON in python
