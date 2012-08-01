@@ -1,6 +1,6 @@
+.. image:: src_imgs/title.png
+    :width: 4in
 
-Introduction to NEURON(90 Mins):
-==================================
 
 
 .. contents::
