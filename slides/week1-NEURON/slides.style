@@ -8,7 +8,9 @@
   ],
     [ "bullet-list-item" , {
       "parent": "bodytext",
-      "spaceBefore": 7}
+      "spaceBefore": 8,
+      "spaceAfter":2
+      }
     ]
     
     ],

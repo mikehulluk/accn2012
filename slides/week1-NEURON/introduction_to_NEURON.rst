@@ -15,7 +15,7 @@ tutorials and images)*
 
 Why use NEURON ( 5-10 mins)
 ----------------------------
-From the NEURON website (my bold type):
+*(From the NEURON website, my bold type):*
 
  - is a flexible and powerful **simulator of neurons and networks**
  - has important advantages over general-purpose simulators helps users **focus on important biological issues** rather than purely computational concerns
@@ -27,25 +27,24 @@ From the NEURON website (my bold type):
  - is well-documented and **actively supported**
  - is **free, open source**, and runs on (almost) everything
 
-Use-cases - What does it do? I
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
+Use-cases
+~~~~~~~~~
   * Modelling of multicompartmental neurons in which membrane voltage is
     calculated from ion flows across the membranes
   * Connections between cells through synapses (chemical & electrical)
   * If you are interested in large networks of 'simple', single
     compartement neurons, there are other options.
 
-Use-cases - What does it do? II
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
-  * For a single compartment cell with simple HH dynamics,
-    you can probably write your own solver using ODE solvers in 
-    matlab/python.
+Use-cases
+~~~~~~~~~
+  * For a single compartment cell with simple HH dynamics, you can probably
+    write your own simulation using the ODE solvers in provided matlab/python.
 
   * As your models develop more complexity:
 
-    - Current dependancies e.g. intracellular Ca dependant K channels
-    - Incoorperation of the cable equations for multicompartmental neurons
-    - Connections via synapses (synaptic delays)
+    - Current dependancies e.g. K channels dependant on intracellular Ca
+    - Incoorperation of the cable equation for multicompartmental neurons
+    - Connections via synapses (delays)
 
   * You may find that you are reimplementing lots of mathematical solving,
     which has been already been done efficiently in NEURON.
@@ -54,6 +53,7 @@ Use-cases - What does it do? II
     (e.g. modeldb)
 
   * NEURON is highly parallelisable (e.g. BBP) for large networks
+
   * There is a python interface
 
 
@@ -72,7 +72,7 @@ Resources
 ~~~~~~~~~
  * Active questions board
  * ModelDB
- * The NEURON Book 
+ * The NEURON Book
 
 
 Basics of NEURON (20-25 mins)
@@ -94,16 +94,16 @@ Overview
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * Two main types of language:
 
-    * Interpreted languages (Python/matlab) are interactive, but slow
+    * *Interpreted* languages (Python/matlab) are interactive, but slow
 
-    * Compiled languages (Fortran/C/C++/...) are fast, but not interactive
+    * *Compiled* languages (Fortran/C/C++/...) are fast, but not interactive
 
  * NEURON uses both:
 
-    * 'HOC' - which controls the 'structure' of the simulation
+    * **HOC** - which controls the 'structure' of the simulation
 
-    * 'NMODL' - a compiled language for specifying the dynamics of
-      channels/synapses (e.g. Hodgkin-Huxley type channels).
+    * **NMODL** - a compiled language for defining the dynamics of
+      channels/synapses mathematically (e.g. Hodgkin-Huxley type channels).
       We will not cover NMODL in this tutorial.
 
 
@@ -111,7 +111,7 @@ Overview
 HOC Interpreter
 ~~~~~~~~~~~~~~~
 
-    * HOC is an interactive interpreter which controls the 'structure' of the simulation:
+    * HOC is an interactive interpreter which controls the *structure* of the simulation:
 
         * creating morphologies
         * choosing which channels to apply and where, changing certain
@@ -151,7 +151,7 @@ NEURON has a graphical user interface:
     :width: 10cm	
 
 
-Or NEURON can be used entirely from the commandline and with 'scripts':
+Or NEURON can be used entirely from the commandline and within scripts:
 
 .. code-block:: verbose
 
@@ -237,25 +237,20 @@ HOC: *psection()*
 
 .. code-block:: verbose
 
-    oc>forall psection()
-    soma { nseg=1  L=12.3  Ra=35.4
-        axon_proximal connect soma (1), 0
-        /* First segment only */
-        insert morphology { diam=12.3}
-        insert capacitance { cm=1}
-    }
+    oc>axon_proximal psection()
     axon_proximal { nseg=11  L=50  Ra=35.4
-        axon_distal connect axon_proximal (1), 0
-        /* First segment only */
-        insert morphology { diam=1.0}
-        insert capacitance { cm=1}
+    /*location 0 attached to cell 1*/
+    /* First segment only */
+    insert capacitance { cm=1}
+    insert morphology { diam=1}
     }
-    axon_distal { nseg=3  L=20  Ra=35.4
-        /*location 0 attached to cell 0*/
-        /* First segment only */
-        insert morphology { diam=0.5}
-        insert capacitance { cm=1}
-    }
+
+This can be used with *foreach*:
+
+.. code-block:: verbose
+
+    oc> forall psection()
+    // <shows 'psection()' for every section>....
 
 
 Channels I (Overview)
@@ -264,13 +259,13 @@ Channels I (Overview)
  * Neurons are interesting because of their active membrane channels
  * Channels define the currents flowing across the membrane (e.g. sodium,
    potassium, leak)
- * NEURON covers common use-cases:
+ * In NEURON: 
 
+    - it comes with some predefined channel definitions (`pas`, `hh`)
     - it is possible to define your own using NMODL files (not covered here)
-    - it comes with some predefined channel definitions.
 
-
- * NEURON automatically inserts a membrane capacitance and an axial resistance
+ * Normally we only need to define the currents flowing accross the membrane -
+   NEURON automatically handles membrane capacitance and axial resistances
 
 Channels II (Segments)
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -335,6 +330,8 @@ Stimuli (Current Clamp)
     oc> stim.dur = 100
     oc> stim.amp = 0.1
 
+*(NEURON documentation gives details of properties of specific objects)*
+
 
 
 
@@ -343,7 +340,7 @@ Running the simulation
 
     * NEURON simulations are run:
 
-        * with the 'run()' command from `.hoc`
+        * with the 'run()' command from `hoc`
         * clicking 'Init & Run' from the GUI
 
     * By default, running the simulation will not plot anything....
@@ -385,7 +382,7 @@ Useful things to know about NEURON
 
     * NEURON has a python interface. This allows you to use the hoc Interpreter
       from within Python, use objects and access stored data as numpy-arrays.
-      HOWEVER! There are limitations on 'clearing-the-workspace'
+      **HOWEVER!** There are limitations on 'clearing-the-workspace'
 
 
 'Competitors' to NEURON
