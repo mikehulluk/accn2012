@@ -1,7 +1,8 @@
 
 
 git-intro.pdf: git-intro.tex
-	pdflatex git-intro.tex
+	rm -rf tmp/
+	pdflatex --shell-escape git-intro.tex
 
 
 clean:

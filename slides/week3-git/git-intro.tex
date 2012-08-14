@@ -1,24 +1,29 @@
 \documentclass{beamer}
-%\usetheme{Madrid} % My favorite!
-%\usetheme{Boadilla} % Pretty neat, soft color.
-%\usetheme{default}
-%\usetheme{Warsaw}
-%\usetheme{Bergen} % This template has nagivation on the left
-%\usetheme{Frankfurt} % Similar to the default 
-%with an extra region at the top.
-%\usecolortheme{seahorse} % Simple and clean template
-%\usetheme{Darmstadt} % not so good
-% Uncomment the following line if you want %
-% page numbers and using Warsaw theme%
-% \setbeamertemplate{footline}[page number]
-%\setbeamercovered{transparent}
 \usetheme{Goettingen}
 
+
+\usepackage{listings}
 \setbeamercovered{invisible}
 % To remove the navigation symbols from 
 % the bottom of slides%
 \setbeamertemplate{navigation symbols}{} 
 %
+
+%\usepackage[hide=true,dir=tmp]{bashful}
+%\lstdefinestyle{bashfulScript}{
+%basicstyle=\ttfamily\scriptsize,
+%keywords={},
+%showstringspaces=false}
+%% listings style for the stdoutFile, can be redefined by client
+%\lstdefinestyle{bashfulStdout}{
+%basicstyle=\sl\ttfamily\scriptsize,
+%keywords={},
+%showstringspaces=false,
+%breaklines=true,
+%}%
+
+
+
 \usepackage{graphicx}
 \usepackage{verbatim}
 %\usepackage{bm}         % For typesetting bold math (not \mathbold)
@@ -51,8 +56,9 @@ University of Edinburgh \\
 \begin{block}
 {This talk}
 \begin{itemize}
-\item Overview of Git (30 mins)
+\item Overview of Git (20 mins)
 \item Practical Session (30 mins)
+\item Further Concepts (10 mins)
 \end{itemize}
 \end{block}
 \end{frame}
@@ -144,11 +150,10 @@ University of Edinburgh \\
 
 \begin{frame}
 \frametitle{Centralised vs Distributed}
-\begin{block}
-{2 types}
+\begin{block}{}
 \begin{description}
 \item[Centralised - \emph{SVN (subversion)} ] The project is stored on a central server, users communicate with the server to make snapshots, jump backwards to a previous commit, etc.
-\item[Distributed - \emph{git (mercurial,...)} ] Each developer has an entire copy of the project on thier local machine. Changes are 'pushed' and 'pulled' between copies of the project. (Often a central repository is used)
+\item[Distributed - \emph{git (mercurial,...)} ] Each developer has an entire copy of the project on thier local machine. Changes are 'pushed' and 'pulled' between copies of the project. (Often a central repository is used) (Backups)
 \end{description}
 \end{block}
 \end{frame}
@@ -157,11 +162,13 @@ University of Edinburgh \\
 \frametitle{Git}
 \begin{block}{}
 \begin{itemize}
-\item Modern Distributed system (2005)
-\item Developed to manage the development of the Linux-Kernel. (Last week 1 commit every 2.5 minutes.)
+\item Modern Distributed Version Control system (2005)
+\item Written by Linus Torvald to manage the development of the Linux-Kernel. (Last week 1 commit every 2.5 minutes.)
 \item Steep learning curve (there are GUI tools)
 \item (git can 'talk-to' SVN repositories)
 \item (Windows/Mac/Linux/etc)
+\item Although it is designed for collaborative work - we will just look at
+using it for a single user locally with no server.
 \end{itemize}
 \end{block}
 \end{frame}
@@ -223,9 +230,90 @@ University of Edinburgh \\
 
 
 
-\begin{frame}
-\frametitle{Git Examples}
-\begin{block}{Demo...}
+
+\begin{frame}[fragile]
+\begin{block}{Initial Config - tell git who you are}
+\begin{lstlisting}[language=bash,basicstyle=\ttfamily\scriptsize]
+$ git config --global user.name "John Doe"
+$ git config --global user.email johndoe@example.com
+\end{lstlisting}
+\end{block}
+\end{frame}
+
+
+\begin{frame}[fragile]
+\begin{block}{Starting a new git repository}
+\begin{lstlisting}[language=bash,basicstyle=\ttfamily\scriptsize]
+% mkdir myproject
+% cd myproject
+% git init
+\end{lstlisting}
+
+\begin{lstlisting}[language=bash,basicstyle=\sl\ttfamily\scriptsize,breaklines=true]
+Initialized empty Git repository in /home/mhtest/myproject/.git/.
+\end{lstlisting}
+
+\begin{lstlisting}[language=bash,basicstyle=\ttfamily\scriptsize,breaklines=true]
+% ls -a
+\end{lstlisting}
+
+\begin{lstlisting}[language=bash,basicstyle=\sl\ttfamily\scriptsize]
+.  ..  .git
+\end{lstlisting}
+
+\end{block}
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\begin{block}{Look at initial status}
+\begin{lstlisting}[language=bash,basicstyle=\ttfamily\scriptsize]
+% git status
+\end{lstlisting}
+\begin{lstlisting}[language=bash,basicstyle=\sl\ttfamily\scriptsize,breaklines=true]
+# On branch master
+#
+# Initial commit
+#
+nothing to commit (create/copy files and use "git add" to track)
+
+\end{lstlisting}
+\end{block}
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]
+\begin{block}{Create a file}
+\begin{lstlisting}[language=bash,basicstyle=\ttfamily\scriptsize]
+% gedit myfile.txt
+% cat myfile.txt
+\end{lstlisting}
+
+\begin{lstlisting}[language=bash,basicstyle=\sl\ttfamily\scriptsize]
+Mike's new file
+Its not very interesting yet.
+\end{lstlisting}
+\end{block}
+
+\begin{block}{Check the status again}
+\begin{lstlisting}[language=bash,basicstyle=\ttfamily\scriptsize]
+% git status
+\end{lstlisting}
+
+\begin{lstlisting}[language=bash,basicstyle=\sl\ttfamily\scriptsize,breaklines=True]
+# On branch master
+#
+# Initial commit
+#
+# Untracked files:
+#   (use "git add <file>..." to include in what will be committed)
+#
+#	myfile.txt
+nothing added to commit but untracked files present (use "git add" to track)
+\end{lstlisting}
 \end{block}
 \end{frame}
 
@@ -233,12 +321,152 @@ University of Edinburgh \\
 
 
 
- 
-\begin{frame}
-\centerline{The End}
+\begin{frame}[fragile]
+\begin{block}{Make a commit}
+\begin{lstlisting}[language=bash,basicstyle=\ttfamily\scriptsize]
+% git add myfile.txt
+% git status
+\end{lstlisting}
+
+\begin{lstlisting}[language=bash,basicstyle=\sl\ttfamily\scriptsize,breaklines=True]
+# On branch master
+#
+# Initial commit
+#
+# Changes to be committed:
+#   (use "git rm --cached <file>..." to unstage)
+#
+#	new file:   myfile.txt
+\end{lstlisting}
+
+
+\begin{lstlisting}[language=bash,basicstyle=\ttfamily\scriptsize]
+% git commit -m 'my first commit'
+\end{lstlisting}
+
+\begin{lstlisting}[language=bash,basicstyle=\sl\ttfamily\scriptsize,breaklines=True]
+[master (root-commit) 4fe00ad] my first commit
+ 1 files changed, 3 insertions(+), 0 deletions(-)
+ create mode 100644 myfile.txt
+\end{lstlisting}
+
+\end{block}
 \end{frame}
 
 
 
+
+
+\begin{frame}[fragile]
+\begin{block}{Look at status}
+\begin{lstlisting}[language=bash,basicstyle=\ttfamily\scriptsize,breaklines=true]
+% git status
+\end{lstlisting}
+\begin{lstlisting}[language=bash,basicstyle=\sl\ttfamily\scriptsize]
+# On branch master
+nothing to commit (working directory clean)
+\end{lstlisting}
+\end{block}
+
+\begin{block}{Make some changes, and a new file}
+\begin{lstlisting}[language=bash,basicstyle=\ttfamily\scriptsize,breaklines=true]
+% gedit myfile.txt
+% git status (output not shown)
+% gedit anewfile.txt
+% git status
+% git add anewfile.txt
+% git commit -a -m 'my second commit'
+\end{lstlisting}
+
+\begin{lstlisting}[language=bash,basicstyle=\sl\ttfamily\scriptsize]
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+ create mode 100644 anewfile.txt
+\end{lstlisting}
+
+\end{block}
+
+
+
+\begin{block}{Make a few more commits}
+\begin{lstlisting}[language=bash,basicstyle=\ttfamily\scriptsize,breaklines=true]
+% gedit / git add / git commit / ...
+\end{lstlisting}
+\end{block}
+\end{frame}
+
+
+\begin{frame}[fragile]
+\begin{block}{Browsing history using GUI tools}
+\begin{lstlisting}[language=bash,basicstyle=\ttfamily\scriptsize,breaklines=true]
+% git log 
+% gitg
+\end{lstlisting}
+
+\end{block}
+\end{frame}
+
+
+
+
+
+\begin{frame}[fragile]
+\begin{block}{Jumping back to an old commit}
+\begin{lstlisting}[language=bash,basicstyle=\ttfamily\scriptsize,breaklines=true]
+% git log
+% git checkout <first-chars-of-sha1-hash>
+% git checkout 4fe00ad2b950
+% ls
+\end{lstlisting}
+
+\begin{lstlisting}[language=bash,basicstyle=\sl\ttfamily\scriptsize]
+myfile.txt
+\end{lstlisting}
+\end{block}
+\end{frame}
+
+
+
+
+
+
+
+
+
+%\begin{frame}[fragile]
+%\begin{block}{Adding some files}
+%\begin{lstlisting}[language=bash,basicstyle=\ttfamily\scriptsize,breaklines=true]
+%% git status
+%\end{lstlisting}
+%\begin{lstlisting}[language=bash,basicstyle=\sl\ttfamily\scriptsize]
+%\end{lstlisting}
+%\end{block}
+%\end{frame}
+
+
+
+ 
+\begin{frame}
+\begin{block}{Brief discussion of concept of branching}
+\end{block}
+\end{frame}
+
+
+\begin{frame}
+\begin{block}{Brief discussion of concept of syncing multiple computers}
+Pushing and Pulling
+\end{block}
+\end{frame}
+
+
+\begin{frame}
+\begin{block}{Online git book}
+\url{http://git-scm.com/book/en/Git-Basics}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\begin{block}{Any Questions}
+\end{block}
+\end{frame}
 
 \end{document} 
