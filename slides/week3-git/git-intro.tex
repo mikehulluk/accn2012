@@ -1,0 +1,193 @@
+\documentclass{beamer}
+%\usetheme{Madrid} % My favorite!
+%\usetheme{Boadilla} % Pretty neat, soft color.
+%\usetheme{default}
+%\usetheme{Warsaw}
+%\usetheme{Bergen} % This template has nagivation on the left
+%\usetheme{Frankfurt} % Similar to the default 
+%with an extra region at the top.
+%\usecolortheme{seahorse} % Simple and clean template
+%\usetheme{Darmstadt} % not so good
+% Uncomment the following line if you want %
+% page numbers and using Warsaw theme%
+% \setbeamertemplate{footline}[page number]
+%\setbeamercovered{transparent}
+\usetheme{Goettingen}
+
+\setbeamercovered{invisible}
+% To remove the navigation symbols from 
+% the bottom of slides%
+\setbeamertemplate{navigation symbols}{} 
+%
+\usepackage{graphicx}
+%\usepackage{bm}         % For typesetting bold math (not \mathbold)
+%\logo{\includegraphics[height=0.6cm]{yourlogo.eps}}
+%
+
+\title[A brief introduction to Git]{A brief introduction to Git}
+\author{Michael Hull}
+\institute[University of Edinburgh]
+{
+University of Edinburgh \\
+\medskip
+{\emph{mikehulluk@googlemail.com}}
+}
+\date{\today}
+% \today will show current date. 
+% Alternatively, you can specify a date.
+%
+\begin{document}
+%
+\begin{frame}
+\titlepage
+\end{frame}
+%
+
+
+
+\begin{frame}
+\frametitle{Overview}
+\begin{block}
+{This talk}
+\begin{itemize}
+\item Overview of Git (30 mins)
+\item Practical Session (30 mins)
+\end{itemize}
+\end{block}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{How do you ...}
+
+\begin{block}
+{ ... keep your Laptop \& Desktop in-sync}
+\begin{itemize}
+\item Dropbox?
+\item E-mail? (Google Drive)
+\item USB stick
+\item (Unison/rsync/ssh)
+\item ??
+\end{itemize}
+\end{block}
+
+\begin{block}
+{... backup your code}
+\begin{itemize}
+\item \emph{(Methods above)} 
+\item Time Machine 
+\item Copy to university-server
+\item ??
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{How do you ...}
+\begin{block}
+{... keep old copies of your code}	
+\begin{itemize}
+\item Create 'zip' files of the directories with the date. 
+\item ??
+\end{itemize}
+\end{block}
+
+
+\begin{block}
+{ \emph{Version Control systems solve these problems (\& more)}	}
+\end{block}
+
+
+
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Version Control}
+
+\begin{block}
+{History}
+\begin{itemize}
+\item Allow multiple developers to work on the same code
+\item Designed by programmers for programmers - work well with text-files
+\item Commandline \& graphical tools
+
+\end{itemize}
+\end{block}
+
+
+\begin{block}
+{Common Concepts}
+\begin{itemize}
+\item Save \emph{snapshots} of a directory at a point in time, which is associated with a version number. Each snapshot is called a {\bf{commit}}. 
+\item Allow you to see the changes made between particular snapshots.
+\item Allow you to jump in time to different snapshots - {\bf{check-out}}. 
+\item Allow you to {\bf{branch}} and {\bf{merge}}.
+\end{itemize}
+\end{block}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Centralised vs Distributed}
+\begin{block}
+{2 types}
+\begin{description}
+\item[Centralised - \emph{SVN (subversion)} ] The project is stored on a central server, users communicate with the server to make snapshots, jump backwards to a previous commit, etc.
+\item[Distributed - \emph{git (mercurial,...)} ] Each developer has an entire copy of the project on thier local machine. Changes are 'pushed' and 'pulled' between copies of the project. (Often a central repository is used)
+\end{description}
+\end{block}
+\end{frame}
+%
+\begin{frame}
+\frametitle{Git}
+\begin{block}{JL}
+\begin{itemize}
+\item Blah
+\end{itemize}
+\end{block}
+\end{frame}
+%
+\begin{frame}[fragile] % Notice the [fragile] option %
+\frametitle{Verbatim}
+\begin{example}[Putting Verbatim]
+\begin{verbatim}
+\begin{frame}
+\frametitle{Outline}
+\begin{block}
+{Why Beamer?}
+Does anybody need an introduction to Beamer?
+I don't think so.
+\end{block}
+% Extra carriage return causes problem with verbatim %
+\end{frame}\end{verbatim} 
+\end{example}
+\end{frame}
+ 
+\begin{frame}[fragile]  % notice the fragile option, since the body
+			% contains a verbatim command
+Example of the \verb|\cite| command to give a reference is below:
+Example of citation using \cite{key1} follows on.
+\end{frame}
+ 
+\begin{frame}
+\frametitle{References}
+\footnotesize{
+\begin{thebibliography}{99}
+ \bibitem[Label1, 2010]{key1} Author's name (1987)
+ \newblock Title of the paper.
+ \newblock \emph{Journal Name} 55(4), 765 -- 799.
+\end{thebibliography}
+}
+\end{frame}
+ 
+\begin{frame}
+\centerline{The End}
+\end{frame}
+% End of slides
+\end{document} 
