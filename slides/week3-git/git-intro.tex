@@ -20,6 +20,7 @@
 \setbeamertemplate{navigation symbols}{} 
 %
 \usepackage{graphicx}
+\usepackage{verbatim}
 %\usepackage{bm}         % For typesetting bold math (not \mathbold)
 %\logo{\includegraphics[height=0.6cm]{yourlogo.eps}}
 %
@@ -72,6 +73,8 @@ University of Edinburgh \\
 \end{itemize}
 \end{block}
 
+\pause
+
 \begin{block}
 {... backup your code}
 \begin{itemize}
@@ -96,6 +99,7 @@ University of Edinburgh \\
 \end{itemize}
 \end{block}
 
+\pause
 
 \begin{block}
 { \emph{Version Control systems solve these problems (\& more)}	}
@@ -113,12 +117,17 @@ University of Edinburgh \\
 \begin{block}
 {History}
 \begin{itemize}
-\item Allow multiple developers to work on the same code
+\item Allow multiple developers to work on the same code (1970's)
 \item Designed by programmers for programmers - work well with text-files
 \item Commandline \& graphical tools
-
 \end{itemize}
 \end{block}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Version Control}
 
 
 \begin{block}
@@ -146,48 +155,90 @@ University of Edinburgh \\
 %
 \begin{frame}
 \frametitle{Git}
-\begin{block}{JL}
+\begin{block}{}
 \begin{itemize}
-\item Blah
+\item Modern Distributed system (2005)
+\item Developed to manage the development of the Linux-Kernel. (Last week 1 commit every 2.5 minutes.)
+\item Steep learning curve (there are GUI tools)
+\item (git can 'talk-to' SVN repositories)
+\item (Windows/Mac/Linux/etc)
 \end{itemize}
 \end{block}
 \end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Git Commands}
 %
-\begin{frame}[fragile] % Notice the [fragile] option %
-\frametitle{Verbatim}
-\begin{example}[Putting Verbatim]
-\begin{verbatim}
-\begin{frame}
-\frametitle{Outline}
-\begin{block}
-{Why Beamer?}
-Does anybody need an introduction to Beamer?
-I don't think so.
+\begin{block}{Initial Setup}
+\begin{itemize}
+\item \verb|git init| - used once to start a new project
+\item \verb|git clone <location>| - clone an existing project
+\end{itemize}
 \end{block}
-% Extra carriage return causes problem with verbatim %
-\end{frame}\end{verbatim} 
-\end{example}
+
+
+\begin{block}{Status}
+\begin{itemize}
+\item \verb|git status| - show the status of the files in the repository
+\end{itemize}
+\end{block}
+
 \end{frame}
- 
-\begin{frame}[fragile]  % notice the fragile option, since the body
-			% contains a verbatim command
-Example of the \verb|\cite| command to give a reference is below:
-Example of citation using \cite{key1} follows on.
+
+
+\begin{frame}[fragile]
+\frametitle{Git Commands}
+
+\begin{block}{Making Commits}
+\begin{itemize}
+\item \verb|git add <filename>| - select files to add to the next commit (snapshot)
+\item \verb|git commit -m '<message>'| - make a commit
+\end{itemize}
+\end{block}
+
+
+\begin{block}{Syncronising Commits}
+\begin{itemize}
+\item \verb|git pull <location>| - update the local repository with commits made in a remote repository.
+\item \verb|git push <location>| - update a remote repository with commits made in this local repository.
+\end{itemize}
+\end{block}
 \end{frame}
- 
+
+
+\begin{frame}[fragile]
+\frametitle{Git Tools}
+
+\begin{block}{Graphical Tools}
+\begin{itemize}
+\item gitg
+\item git cola
+\end{itemize}
+\end{block}
+\end{frame}
+
+
+
+
+
+
 \begin{frame}
-\frametitle{References}
-\footnotesize{
-\begin{thebibliography}{99}
- \bibitem[Label1, 2010]{key1} Author's name (1987)
- \newblock Title of the paper.
- \newblock \emph{Journal Name} 55(4), 765 -- 799.
-\end{thebibliography}
-}
+\frametitle{Git Examples}
+\begin{block}{Demo...}
+\end{block}
 \end{frame}
+
+
+
+
+
  
 \begin{frame}
 \centerline{The End}
 \end{frame}
-% End of slides
+
+
+
+
 \end{document} 
