@@ -406,11 +406,3 @@ Any Questions
  ??
 
 
-Who am I
-~~~~~~~~
-
-    * I am not a NEURON guru
-    * 3rd year Ph.D student (4 years using NEURON for modelling work)
-    * Teaching-Assistant for Neural-Computation course at Edinburgh Uni
-    * One of the developers of NineML (incl. NEURON interface)
-    * Author of *morphforge* - a high-level interface to NEURON in python
